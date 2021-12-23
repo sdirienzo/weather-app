@@ -42,7 +42,7 @@ class AppView {
         const searchForm = this.createElement('form', 'weather-search-form');
         const searchContainer = this.createElement('div', 'weather-search-container');
         const searchIcon = this.createElement('i', 'fas fa-search');
-        const searchInput = this.createElement('input', 'weather-search-input"');
+        const searchInput = this.createElement('input', 'weather-search-input');
         searchInput.type = 'text';
 
         searchContainer.append(searchIcon);
