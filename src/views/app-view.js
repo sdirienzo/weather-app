@@ -3,6 +3,10 @@ class AppView {
     
     content;
 
+    currentWeather;
+
+    weatherForecast;
+
     constructor(pubSub) {
         this.pubSub = pubSub;
 
@@ -44,28 +48,36 @@ class AppView {
     createWeatherCurrentSection() {
         const weatherCurrentSection = this.createElement('div', 'weather-current-section');
         const weatherCurrentContainer = this.createElement('div', 'weather-current-container');
+        
+        weatherCurrentSection.append(weatherCurrentContainer);
+        
+        this.currentWeather = weatherCurrentContainer;
+        this.content.append(weatherCurrentSection);
+    }
+
+    createCurrentWeather(feelsLikeTemp, windSpeed, humidity, conditionIconClass) {
         const weatherCurrentCondition = this.createElement('div', 'weather-current-condition-text');
         const weatherCurrentLocation = this.createElement('div', 'weather-current-location');
         const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
         const weatherCurrentTemp = this.createElement('div', 'weather-current-temp');
         const weatherCurrentDetails = this.createElement('div', 'weather-current-details');
         const weatherCurrentFeelsLike = this.createElement('div', 'weather-current-feels-like');
-        weatherCurrentFeelsLike.innerText = 'Feels Like: ';
-        const weatherCurrentFeelsLikeSpan = this.createElement('span');
+        weatherCurrentFeelsLike.innerText = `Feels Like: ${feelsLikeTemp}`;
+        // const weatherCurrentFeelsLikeSpan = this.createElement('span');
         const weatherCurrentWind = this.createElement('div', 'weather-current-wind');
-        weatherCurrentWind.innerText = 'Wind: ';
-        const weatherCurrentWindSpan = this.createElement('span');
+        weatherCurrentWind.innerText = `Wind: ${windSpeed}`;
+        // const weatherCurrentWindSpan = this.createElement('span');
         const weatherCurrentHumidity = this.createElement('div', 'weather-current-humidity');
-        weatherCurrentHumidity.innerText = 'Humidity: ';
-        const weatherCurrentHumiditySpan = this.createElement('span');
+        weatherCurrentHumidity.innerText = `Humidity: ${humidity}`;
+        // const weatherCurrentHumiditySpan = this.createElement('span');
         const weatherCurrentConditionIconContainer = this.createElement('div', 'weather-current-condition-icon');
-        const weatherCurrentConditionIcon = this.createElement('i', 'fas');
+        const weatherCurrentConditionIcon = this.createElement('i', `fas ${conditionIconClass}`);
 
         weatherCurrentConditionIconContainer.append(weatherCurrentConditionIcon);
 
-        weatherCurrentFeelsLike.append(weatherCurrentFeelsLikeSpan);
-        weatherCurrentWind.append(weatherCurrentWindSpan);
-        weatherCurrentHumidity.append(weatherCurrentHumiditySpan);
+        // weatherCurrentFeelsLike.append(weatherCurrentFeelsLikeSpan);
+        // weatherCurrentWind.append(weatherCurrentWindSpan);
+        // weatherCurrentHumidity.append(weatherCurrentHumiditySpan);
 
         weatherCurrentDetails.append(weatherCurrentFeelsLike);
         weatherCurrentDetails.append(weatherCurrentWind);
@@ -74,14 +86,10 @@ class AppView {
         weatherCurrentDescription.append(weatherCurrentTemp);
         weatherCurrentDescription.append(weatherCurrentDetails);
 
-        weatherCurrentContainer.append(weatherCurrentCondition);
-        weatherCurrentContainer.append(weatherCurrentLocation);
-        weatherCurrentContainer.append(weatherCurrentDescription);
-        weatherCurrentContainer.append(weatherCurrentConditionIconContainer);
-
-        weatherCurrentSection.append(weatherCurrentContainer);
-
-        this.content.append(weatherCurrentContainer);
+        this.currentWeather.append(weatherCurrentCondition);
+        this.currentWeather.append(weatherCurrentLocation);
+        this.currentWeather.append(weatherCurrentDescription);
+        this.currentWeather.append(weatherCurrentConditionIconContainer);
     }
 
     createWeatherForecastSection() {
@@ -90,6 +98,7 @@ class AppView {
 
         weatherForecastSection.append(weatherForecastContainer);
 
+        this.weatherForecast = weatherForecastContainer;
         this.content.append(weatherForecastSection);
     }
 
@@ -112,6 +121,8 @@ class AppView {
 
         return dayForecast;
     }
+
+
 }
 
 export default AppView;
