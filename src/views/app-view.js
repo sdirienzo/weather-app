@@ -11,6 +11,14 @@ class AppView {
         this.pubSub = pubSub;
 
         this.content = this.getElement('#content');
+
+        this.init();
+    }
+
+    init() {
+        this.createWeatherSearchSection();
+        this.createWeatherCurrentSection();
+        this.createWeatherForecastSection();
     }
 
     getElement(selector) {
