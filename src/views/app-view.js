@@ -21,6 +21,12 @@ class AppView {
         this.createWeatherForecastSection();
     }
 
+    subscribeView() {
+        this.pubSub.subscribe('display-weather', this.createCurrentWeather.bind(this));
+
+        this.pubSub.subscribe('display-forecast', this.createWeatherForecast.bind(this));
+    }
+
     getElement(selector) {
         return document.querySelector(selector);
     }
@@ -144,10 +150,10 @@ class AppView {
         return dayForecast;
     }
 
-    createWeatherForecast(msg, weather) {
+    createWeatherForecast(msg, forecast) {
         this.destroyWeatherForecast();
-        
-        weather.forecast.forEach(day => {
+
+        forecast.forEach(day => {
             this.weatherForecast.append(this.createWeatherForecastDay(day.weekday, day.temp, day.conditionIconClass));
         });
     }
