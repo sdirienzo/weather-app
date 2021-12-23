@@ -63,23 +63,23 @@ class AppView {
         this.content.append(weatherCurrentSection);
     }
 
-    createCurrentWeather(feelsLikeTemp, windSpeed, humidity, conditionIconClass) {
+    createCurrentWeather(msg, weather) {
         const weatherCurrentCondition = this.createElement('div', 'weather-current-condition-text');
         const weatherCurrentLocation = this.createElement('div', 'weather-current-location');
         const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
         const weatherCurrentTemp = this.createElement('div', 'weather-current-temp');
         const weatherCurrentDetails = this.createElement('div', 'weather-current-details');
         const weatherCurrentFeelsLike = this.createElement('div', 'weather-current-feels-like');
-        weatherCurrentFeelsLike.innerText = `Feels Like: ${feelsLikeTemp}`;
+        weatherCurrentFeelsLike.innerText = `Feels Like: ${weather.currentWeather.feelsLikeTemp}`;
         // const weatherCurrentFeelsLikeSpan = this.createElement('span');
         const weatherCurrentWind = this.createElement('div', 'weather-current-wind');
-        weatherCurrentWind.innerText = `Wind: ${windSpeed}`;
+        weatherCurrentWind.innerText = `Wind: ${weather.currentWeather.windSpeed}`;
         // const weatherCurrentWindSpan = this.createElement('span');
         const weatherCurrentHumidity = this.createElement('div', 'weather-current-humidity');
-        weatherCurrentHumidity.innerText = `Humidity: ${humidity}`;
+        weatherCurrentHumidity.innerText = `Humidity: ${weather.currentWeather.humidity}`;
         // const weatherCurrentHumiditySpan = this.createElement('span');
         const weatherCurrentConditionIconContainer = this.createElement('div', 'weather-current-condition-icon');
-        const weatherCurrentConditionIcon = this.createElement('i', `fas ${conditionIconClass}`);
+        const weatherCurrentConditionIcon = this.createElement('i', `fas ${weather.currentWeather.conditionIconClass}`);
 
         weatherCurrentConditionIconContainer.append(weatherCurrentConditionIcon);
 
