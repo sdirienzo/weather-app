@@ -37,6 +37,18 @@ class AppView {
         return element;
     }
 
+     destroyCurrentWeather() {
+        while (this.currentWeather.firstChild) {
+            this.currentWeather.removeChild(this.currentWeather.firstChild);
+        }
+     }
+    
+    destroyWeatherForecast() {
+        while (this.weatherForecast.firstChild) {
+            this.weatherForecast.removeChild(this.weatherForecast.firstChild);
+        }
+    }
+
     createWeatherSearchSection() {
         const searchSection = this.createElement('div', 'weather-search-section');
         const searchForm = this.createElement('form', 'weather-search-form');
@@ -64,6 +76,8 @@ class AppView {
     }
 
     createCurrentWeather(msg, weather) {
+        this.destroyCurrentWeather();
+
         const weatherCurrentCondition = this.createElement('div', 'weather-current-condition-text');
         const weatherCurrentLocation = this.createElement('div', 'weather-current-location');
         const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
@@ -130,7 +144,13 @@ class AppView {
         return dayForecast;
     }
 
-
+    createWeatherForecast(msg, weather) {
+        this.destroyWeatherForecast();
+        
+        weather.forecast.forEach(day => {
+            this.weatherForecast.append(this.createWeatherForecastDay(day.weekday, day.temp, day.conditionIconClass));
+        });
+    }
 }
 
 export default AppView;
