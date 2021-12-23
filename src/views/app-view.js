@@ -40,6 +40,49 @@ class AppView {
 
         this.content.append(searchSection);
     }
+
+    createWeatherCurrentSection() {
+        const weatherCurrentSection = this.createElement('div', 'weather-current-section');
+        const weatherCurrentContainer = this.createElement('div', 'weather-current-container');
+        const weatherCurrentCondition = this.createElement('div', 'weather-current-condition-text');
+        const weatherCurrentLocation = this.createElement('div', 'weather-current-location');
+        const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
+        const weatherCurrentTemp = this.createElement('div', 'weather-current-temp');
+        const weatherCurrentDetails = this.createElement('div', 'weather-current-details');
+        const weatherCurrentFeelsLike = this.createElement('div', 'weather-current-feels-like');
+        weatherCurrentFeelsLike.innerText = 'Feels Like: ';
+        const weatherCurrentFeelsLikeSpan = this.createElement('span');
+        const weatherCurrentWind = this.createElement('div', 'weather-current-wind');
+        weatherCurrentWind.innerText = 'Wind: ';
+        const weatherCurrentWindSpan = this.createElement('span');
+        const weatherCurrentHumidity = this.createElement('div', 'weather-current-humidity');
+        weatherCurrentHumidity.innerText = 'Humidity: ';
+        const weatherCurrentHumiditySpan = this.createElement('span');
+        const weatherCurrentConditionIconContainer = this.createElement('div', 'weather-current-condition-icon');
+        const weatherCurrentConditionIcon = this.createElement('i', 'fas');
+
+        weatherCurrentConditionIconContainer.append(weatherCurrentConditionIcon);
+
+        weatherCurrentFeelsLike.append(weatherCurrentFeelsLikeSpan);
+        weatherCurrentWind.append(weatherCurrentWindSpan);
+        weatherCurrentHumidity.append(weatherCurrentHumiditySpan);
+
+        weatherCurrentDetails.append(weatherCurrentFeelsLike);
+        weatherCurrentDetails.append(weatherCurrentWind);
+        weatherCurrentDetails.append(weatherCurrentHumidity);
+
+        weatherCurrentDescription.append(weatherCurrentTemp);
+        weatherCurrentDescription.append(weatherCurrentDetails);
+
+        weatherCurrentContainer.append(weatherCurrentCondition);
+        weatherCurrentContainer.append(weatherCurrentLocation);
+        weatherCurrentContainer.append(weatherCurrentDescription);
+        weatherCurrentContainer.append(weatherCurrentConditionIconContainer);
+
+        weatherCurrentSection.append(weatherCurrentContainer);
+
+        this.content.append(weatherCurrentContainer);
+    }
 }
 
 export default AppView;
