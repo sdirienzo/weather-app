@@ -3,6 +3,8 @@ class AppView {
     
     content;
 
+    searchInput;
+
     currentWeather;
 
     weatherForecast;
@@ -25,6 +27,8 @@ class AppView {
         this.pubSub.subscribe('display-weather', this.createCurrentWeather.bind(this));
 
         this.pubSub.subscribe('display-forecast', this.createWeatherForecast.bind(this));
+
+        this.applyEventListeners();
     }
 
     getElement(selector) {
@@ -68,6 +72,7 @@ class AppView {
         searchForm.append(searchContainer);
         searchSection.append(searchForm);
 
+        this.searchInput = searchInput;
         this.content.append(searchSection);
     }
 
@@ -151,6 +156,16 @@ class AppView {
 
         forecast.forEach(day => {
             this.weatherForecast.append(this.createWeatherForecastDay(day.weekday, day.temp, day.conditionIconClass));
+        });
+    }
+
+    applyEventListeners() {
+        this.searchInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                const searchData = {};
+                searchData.city = this.searchInput.value;
+                this.pubSub.publish('get-weather', searchData);
+            }
         });
     }
 }
