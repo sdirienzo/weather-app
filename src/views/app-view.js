@@ -83,6 +83,15 @@ class AppView {
 
         this.content.append(weatherCurrentContainer);
     }
+
+    createWeatherForecastSection() {
+        const weatherForecastSection = this.createElement('div', 'weather-forecast-section');
+        const weatherForecastContainer = this.createElement('div', 'weather-forecast-container');
+
+        weatherForecastSection.append(weatherForecastContainer);
+
+        this.content.append(weatherForecastSection);
+    }
 }
 
 export default AppView;
