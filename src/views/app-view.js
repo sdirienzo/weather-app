@@ -92,6 +92,26 @@ class AppView {
 
         this.content.append(weatherForecastSection);
     }
+
+    createWeatherForecastDay(weekday, temp, conditionIconClass) {
+        const dayForecast = this.createElement('div', 'weather-forecast-day');
+        const forecastWeekday = this.createElement('div', 'weather-forecast-weekday');
+        const forecastTemp = this.createElement('div', 'weather-forecast-temp');
+        const forecastCondition = this.createElement('div', 'weather-forecast-condition');
+        const forecastConditionIcon = this.createElement('i', 'fas');
+
+        forecastWeekday.innerText = weekday;
+        forecastTemp.innerText = temp;
+        forecastConditionIcon.classList.add(conditionIconClass);
+
+        forecastCondition.append(forecastConditionIcon);
+
+        dayForecast.append(forecastWeekday);
+        dayForecast.append(forecastTemp);
+        dayForecast.append(forecastCondition);
+
+        return dayForecast;
+    }
 }
 
 export default AppView;
