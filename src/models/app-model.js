@@ -17,6 +17,11 @@ class AppModel {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${this.apiKey}`, { mode: 'cors' });
         return response.json();
     }
+
+    async getWeatherForecast(lat, lon) {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=current,minutely,hourly,alerts&appid=${this.apiKey}`, { mode: 'cors' });
+        return response.json();
+    }
 }
 
 export default AppModel;
