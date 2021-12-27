@@ -22,12 +22,42 @@ class AppModel {
 
     async getCurrentWeather(city) {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${this.apiKey}`, { mode: 'cors' });
-        return response.json();
+        
+        if (response.ok) {
+            return response.json();
+        }
+        
+        if (response.status === 404) {
+            throw new Error('City not found');
+        }
+
+        if (response.status === 429) {
+            throw new Error('Surpassed API call limit')
+        }
+
+        if (response.status >= 500 && response.status < 600) {
+            throw new Error('Bad response from server');
+        }
     }
 
     async getWeatherForecast(lat, lon) {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=current,minutely,hourly,alerts&appid=${this.apiKey}`, { mode: 'cors' });
-        return response.json();
+        
+        if (response.ok) {
+            return response.json();
+        }
+        
+        if (response.status === 404) {
+            throw new Error('City not found');
+        }
+
+        if (response.status === 429) {
+            throw new Error('Surpassed API call limit')
+        }
+
+        if (response.status >= 500 && response.status < 600) {
+            throw new Error('Bad response from server');
+        }
     }
 
     prepareCurrentWeatherPayload(response) {
@@ -61,14 +91,36 @@ class AppModel {
     }
 
     async getWeather(msg, searchData) {
-        const currentWeatherResponse = await this.getCurrentWeather(searchData.city);
-        const weatherForecastResponse = await this.getWeatherForecast(currentWeatherResponse.coord.lat, currentWeatherResponse.coord.lon);
+        try {
+            const currentWeatherResponse = await this.getCurrentWeather(searchData.city);
 
-        const currentWeather = this.prepareCurrentWeatherPayload(currentWeatherResponse);
-        const weatherForecast = this.prepareWeatherForecastPayload(weatherForecastResponse);
+            const weatherForecastResponse = await this.getWeatherForecast(currentWeatherResponse.coord.lat, currentWeatherResponse.coord.lon);
 
-        this.pubSub.publish('display-weather', currentWeather);
-        this.pubSub.publish('display-forecast', weatherForecast);
+            const currentWeather = this.prepareCurrentWeatherPayload(currentWeatherResponse);
+            const weatherForecast = this.prepareWeatherForecastPayload(weatherForecastResponse);
+
+            this.pubSub.publish('display-weather', currentWeather);
+            this.pubSub.publish('display-forecast', weatherForecast);
+        } catch (error) {
+            this.handlError(error);
+        }
+       
+    }
+
+    handlError(error) {
+        let errorMessage;
+        
+        if (error.message === 'City not found') {
+            errorMessage = 'City not found';
+        } else if (error.mesage === 'Surpassed API call limit') {
+            errorMessage = 'Can only search 60 times per minute. Please try again later';
+        } else if (error.mesage === 'Bad response from server') {
+            errorMessage = 'Something went wrong. Please try again';
+        } else {
+            errorMessage = 'Something went wrong. Please try again';
+        }
+            
+        this.pubSub.publish('display-error', { errorMessage });
     }
 }
 

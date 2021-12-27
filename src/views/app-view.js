@@ -5,6 +5,8 @@ class AppView {
     
     content;
 
+    searchContainer;
+
     searchInput;
 
     currentWeather;
@@ -31,6 +33,8 @@ class AppView {
         this.pubSub.subscribe('display-weather', this.displayCurrentWeather.bind(this));
 
         this.pubSub.subscribe('display-forecast', this.displayWeatherForecast.bind(this));
+
+        this.pubSub.subscribe('display-error', this.displayErrorMessage.bind(this));
 
         this.applyEventListeners();
     }
@@ -124,6 +128,7 @@ class AppView {
         searchForm.append(searchContainer);
         searchSection.append(searchForm);
 
+        this.searchContainer = searchContainer;
         this.searchInput = searchInput;
         this.content.append(searchSection);
     }
@@ -150,6 +155,12 @@ class AppView {
 
     displayCurrentWeather(msg, currentWeather) {
         this.destroyCurrentWeather();
+
+        if (this.searchContainer.childElementCount === 3) {
+            this.searchContainer.removeChild(this.searchContainer.lastChild);
+        }
+
+        this.searchInput.classList.remove('weather-search-input-error');
 
         const weatherCurrentCondition = this.createElement('div', 'weather-current-condition-text');
         weatherCurrentCondition.innerText = currentWeather.condition;
@@ -219,6 +230,19 @@ class AppView {
         forecast.days.forEach(day => {
             this.weatherForecast.append(this.createWeatherForecastDay(day.weekday, day.temp, day.id));
         });
+    }
+
+    displayErrorMessage(msg, error) {
+        if (this.searchContainer.childElementCount === 3) {
+            this.searchContainer.removeChild(this.searchContainer.lastChild);
+        }
+
+        const errorMessageNode = this.createElement('div', 'error-message');
+        errorMessageNode.innerText = error.errorMessage;
+
+
+        this.searchInput.classList.add('weather-search-input-error');
+        this.searchContainer.append(errorMessageNode);
     }
 
     applyEventListeners() {
