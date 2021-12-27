@@ -34,7 +34,7 @@ class AppModel {
         currentWeather.location = `${response.name}, ${response.sys.country}`;
         currentWeather.condition = response.weather[0].main;
         currentWeather.temp = Math.round(response.main.temp);
-        currentWeather.feelsLiketemp = Math.round(response.main.feels_like);
+        currentWeather.feelsLikeTemp = Math.round(response.main.feels_like);
         currentWeather.windSpeed = Math.round(response.wind.speed);
         currentWeather.humidity = response.main.humidity;
 

@@ -9,8 +9,8 @@ class AppController {
     }
 
     init() {
-        this.#model.subscribeModel();
         this.#view.subscribeView();
+        this.#model.subscribeModel();
     }
 
 }

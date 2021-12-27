@@ -159,6 +159,8 @@ class AppView {
 
         const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
         const weatherCurrentTemp = this.createElement('div', 'weather-current-temp');
+        weatherCurrentTemp.innerText = currentWeather.temp;
+
         const weatherCurrentDetails = this.createElement('div', 'weather-current-details');
         const weatherCurrentFeelsLike = this.createElement('div', 'weather-current-feels-like');
         weatherCurrentFeelsLike.innerText = `Feels Like: ${currentWeather.feelsLikeTemp}`;
@@ -182,7 +184,7 @@ class AppView {
         weatherCurrentDescription.append(weatherCurrentTemp);
         weatherCurrentDescription.append(weatherCurrentDetails);
 
-        this.body.backgroundColor = this.getWeatherBackgroundColor(currentWeather.id);
+        this.body.style.backgroundColor = this.getWeatherBackgroundColor(currentWeather.id);
 
         this.currentWeather.append(weatherCurrentCondition);
         this.currentWeather.append(weatherCurrentLocation);
@@ -190,12 +192,13 @@ class AppView {
         this.currentWeather.append(weatherCurrentConditionIconContainer);
     }
 
-    createWeatherForecastDay(weekday, temp, conditionIconClass) {
+    createWeatherForecastDay(weekday, temp, id) {
         const dayForecast = this.createElement('div', 'weather-forecast-day');
         const forecastWeekday = this.createElement('div', 'weather-forecast-weekday');
         const forecastTemp = this.createElement('div', 'weather-forecast-temp');
         const forecastCondition = this.createElement('div', 'weather-forecast-condition');
         const forecastConditionIcon = this.createElement('i', 'fas');
+        const conditionIconClass = this.getWeatherIconClass(id);
 
         forecastWeekday.innerText = weekday;
         forecastTemp.innerText = temp;
@@ -213,8 +216,8 @@ class AppView {
     displayWeatherForecast(msg, forecast) {
         this.destroyWeatherForecast();
 
-        forecast.forEach(day => {
-            this.weatherForecast.append(this.createWeatherForecastDay(day.weekday, day.temp, day.conditionIconClass));
+        forecast.days.forEach(day => {
+            this.weatherForecast.append(this.createWeatherForecastDay(day.weekday, day.temp, day.id));
         });
     }
 
