@@ -170,17 +170,17 @@ class AppView {
 
         const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
         const weatherCurrentTemp = this.createElement('div', 'weather-current-temp');
-        weatherCurrentTemp.innerText = currentWeather.temp;
+        weatherCurrentTemp.innerText = `${currentWeather.temp}° F`;
 
         const weatherCurrentDetails = this.createElement('div', 'weather-current-details');
         const weatherCurrentFeelsLike = this.createElement('div', 'weather-current-feels-like');
-        weatherCurrentFeelsLike.innerText = `Feels Like: ${currentWeather.feelsLikeTemp}`;
+        weatherCurrentFeelsLike.innerText = `Feels Like: ${currentWeather.feelsLikeTemp}° F`;
 
         const weatherCurrentWind = this.createElement('div', 'weather-current-wind');
-        weatherCurrentWind.innerText = `Wind: ${currentWeather.windSpeed}`;
+        weatherCurrentWind.innerText = `Wind: ${currentWeather.windSpeed} MPH`;
 
         const weatherCurrentHumidity = this.createElement('div', 'weather-current-humidity');
-        weatherCurrentHumidity.innerText = `Humidity: ${currentWeather.humidity}`;
+        weatherCurrentHumidity.innerText = `Humidity: ${currentWeather.humidity}%`;
 
         const weatherCurrentConditionIconContainer = this.createElement('div', 'weather-current-condition-icon');
         const conditionIconClass = this.getWeatherIconClass(currentWeather.id);
@@ -212,7 +212,7 @@ class AppView {
         const conditionIconClass = this.getWeatherIconClass(id);
 
         forecastWeekday.innerText = weekday;
-        forecastTemp.innerText = temp;
+        forecastTemp.innerText = `${temp}° F`;
         forecastConditionIcon.classList.add(conditionIconClass);
 
         forecastCondition.append(forecastConditionIcon);
