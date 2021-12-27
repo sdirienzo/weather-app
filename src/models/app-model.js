@@ -13,6 +13,11 @@ class AppModel {
         this.pubSub.subscribe('get-weather', this.getWeather.bind(this));
     }
 
+    getWeekdayFromUnixTimestamp(unixTimestamp) {
+        const weekday = new Date(unixTimestamp * 1000).toLocaleDateString('en', {weekday: 'long'});
+        return weekday;
+    }
+
     async getCurrentWeather(city) {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${this.apiKey}`, { mode: 'cors' });
         return response.json();
@@ -36,16 +41,32 @@ class AppModel {
         return currentWeather;
     }
 
-    async getWeather(msg, searchData) {
-        const currentWeather = {};
+    prepareWeatherForecastPayload(response) {
         const weatherForecast = {};
+        weatherForecast.days = [];
 
+        response.daily.forEach((dayForecast, index) => {
+            if (index > 0) {
+                const day = {};
+                day.weekday = this.getWeekdayFromUnixTimestamp(dayForecast.dt);
+                day.temp = Math.round(dayForecast.temp.day);
+                day.id = dayForecast.weather[0].id;
+                weatherForecast.days.push(day);
+            }
+        });
+
+        return weatherForecast;
+    }
+
+    async getWeather(msg, searchData) {
         const currentWeatherResponse = await this.getCurrentWeather(searchData.city);
         const weatherForecastResponse = await this.getWeatherForecast(currentWeatherResponse.coord.lat, currentWeatherResponse.coord.lon);
 
-        
-        console.log(this.prepareCurrentWeatherPayload(currentWeatherResponse));
-        console.log(weatherForecastResponse);
+        const currentWeather = this.prepareCurrentWeatherPayload(currentWeatherResponse);
+        const weatherForecast = this.prepareWeatherForecastPayload(weatherForecastResponse);
+
+        this.pubSub.publish('display-weather', currentWeather);
+        this.pubSub.publish('display-forecast', weatherForecast);
     }
 }
 
