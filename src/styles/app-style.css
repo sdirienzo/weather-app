@@ -1,0 +1,101 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  padding-left: 5%;
+  padding-right: 5%;
+  background-color: #3f90c3;
+  font-family: "Helvetica Neue";
+}
+
+#content {
+  display: grid;
+  grid-template-rows: 25% 1fr 1fr;
+  height: 100%;
+  color: white;
+}
+
+.weather-search-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.weather-search-form {
+  height: 35px;
+  width: 300px;
+}
+
+.weather-search-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.weather-search-input {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: 4px;
+}
+
+.weather-search-container > i {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+}
+
+.weather-current-section {
+  display: flex;
+}
+
+.weather-current-condition-text {
+  font-size: 1.5rem;
+}
+
+.weather-current-location {
+  text-transform: capitalize;
+  font-size: 3rem;
+}
+
+.weather-current-description {
+  display: flex;
+  gap: 20px;
+}
+
+.weather-current-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  font-size: 1.5rem;
+}
+
+.weather-current-temp {
+  font-size: 10rem;
+}
+
+.weather-current-condition-icon {
+  font-size: 8rem;
+}
+
+.weather-forecast-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 5%;
+}
+
+.weather-forecast-weekday {
+  font-size: 1.5rem;
+}
+
+.weather-forecast-temp {
+  font-size: 2rem;
+}
+
+.weather-forecast-condition {
+  font-size: 2rem;
+}
