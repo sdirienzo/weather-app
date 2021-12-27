@@ -11,6 +11,8 @@ class AppModel {
 
     subscribeModel() {
         this.pubSub.subscribe('get-weather', this.getWeather.bind(this));
+
+        this.pubSub.publish('get-weather', { city: 'cupertino' });
     }
 
     getWeekdayFromUnixTimestamp(unixTimestamp) {
