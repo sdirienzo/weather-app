@@ -91,15 +91,36 @@ class AppModel {
     }
 
     async getWeather(msg, searchData) {
-        const currentWeatherResponse = await this.getCurrentWeather(searchData.city);
+        try {
+            const currentWeatherResponse = await this.getCurrentWeather(searchData.city);
 
-        const weatherForecastResponse = await this.getWeatherForecast(currentWeatherResponse.coord.lat, currentWeatherResponse.coord.lon);
+            const weatherForecastResponse = await this.getWeatherForecast(currentWeatherResponse.coord.lat, currentWeatherResponse.coord.lon);
 
-        const currentWeather = this.prepareCurrentWeatherPayload(currentWeatherResponse);
-        const weatherForecast = this.prepareWeatherForecastPayload(weatherForecastResponse);
+            const currentWeather = this.prepareCurrentWeatherPayload(currentWeatherResponse);
+            const weatherForecast = this.prepareWeatherForecastPayload(weatherForecastResponse);
 
-        this.pubSub.publish('display-weather', currentWeather);
-        this.pubSub.publish('display-forecast', weatherForecast);
+            this.pubSub.publish('display-weather', currentWeather);
+            this.pubSub.publish('display-forecast', weatherForecast);
+        } catch (error) {
+            this.handlError(error);
+        }
+       
+    }
+
+    handlError(error) {
+        let errorMessage;
+        
+        if (error.message === 'City not found') {
+            errorMessage = 'City not found';
+        } else if (error.mesage === 'Surpassed API call limit') {
+            errorMessage = 'Can only search 60 times per minute. Please try again later';
+        } else if (error.mesage === 'Bad response from server') {
+            errorMessage = 'Something went wrong. Please try again';
+        } else {
+            errorMessage = 'Something went wrong. Please try again';
+        }
+            
+        this.pubSub.publish('display-error', { errorMessage });
     }
 }
 

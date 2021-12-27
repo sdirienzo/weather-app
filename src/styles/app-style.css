@@ -5,7 +5,6 @@ body {
   width: 100vw;
   padding-left: 5%;
   padding-right: 5%;
-  background-color: #3f90c3;
   font-family: "Helvetica Neue";
 }
 
@@ -14,6 +13,10 @@ body {
   grid-template-rows: 25% 1fr 1fr;
   height: 100%;
   color: white;
+}
+
+.error-message {
+  color: tomato;
 }
 
 .weather-search-section {
@@ -38,8 +41,13 @@ body {
   height: 100%;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
+  outline: none;
   border: none;
   border-radius: 4px;
+}
+
+.weather-search-input-error {
+  border: 1px solid tomato;
 }
 
 .weather-search-container > i {
