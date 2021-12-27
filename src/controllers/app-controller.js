@@ -1,12 +1,16 @@
 class AppController {
+    #model;
+    
     #view;
 
-    constructor(view) {
+    constructor(model, view) {
+        this.#model = model;
         this.#view = view;
     }
 
     init() {
-        this.view.subscribeView();
+        this.#model.subscribeModel();
+        this.#view.subscribeView();
     }
 
 }
