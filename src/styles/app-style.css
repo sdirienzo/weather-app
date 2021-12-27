@@ -57,6 +57,7 @@ body {
 }
 
 .weather-current-location {
+  text-transform: capitalize;
   font-size: 3rem;
 }
 

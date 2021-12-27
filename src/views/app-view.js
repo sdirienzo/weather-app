@@ -1,5 +1,7 @@
 class AppView {
     pubSub;
+
+    body;
     
     content;
 
@@ -11,6 +13,8 @@ class AppView {
 
     constructor(pubSub) {
         this.pubSub = pubSub;
+
+        this.body = this.getElement('body');
 
         this.content = this.getElement('#content');
 
@@ -24,9 +28,9 @@ class AppView {
     }
 
     subscribeView() {
-        this.pubSub.subscribe('display-weather', this.createCurrentWeather.bind(this));
+        this.pubSub.subscribe('display-weather', this.displayCurrentWeather.bind(this));
 
-        this.pubSub.subscribe('display-forecast', this.createWeatherForecast.bind(this));
+        this.pubSub.subscribe('display-forecast', this.displayWeatherForecast.bind(this));
 
         this.applyEventListeners();
     }
@@ -59,6 +63,54 @@ class AppView {
         }
     }
 
+    getWeatherIconClass(id) {
+        if (id >= 200 && id < 300) {
+            return 'fa-bolt';
+        }
+        if (id >= 300 && id < 400) {
+            return 'fa-cloud-rain';
+        }
+        if (id >= 500 && id < 600) {
+            return 'fa-cloud-showers-heavy';
+        }
+        if (id >= 600 && id < 700) {
+            return 'fa-snowflake';
+        }
+        if (id >= 700 && id < 800) {
+            return 'fa-smog';
+        }
+        if (id === 800) {
+            return 'fa-sun';
+        }
+        if (id >= 801 && id < 900) {
+            return 'fa-cloud';
+        }
+    }
+
+    getWeatherBackgroundColor(id) {
+        if (id >= 200 && id < 300) {
+            return '#3C424C';
+        }
+        if (id >= 300 && id < 400) {
+            return '#3C424C';
+        }
+        if (id >= 500 && id < 600) {
+            return '#3C424C';
+        }
+        if (id >= 600 && id < 700) {
+            return '#B8B8B8';
+        }
+        if (id >= 700 && id < 800) {
+            return '#D3D2D3';
+        }
+        if (id === 800) {
+            return '#3f90c3';
+        }
+        if (id >= 801 && id < 900) {
+            return '#C9CACA';
+        }
+    }
+
     createWeatherSearchSection() {
         const searchSection = this.createElement('div', 'weather-search-section');
         const searchForm = this.createElement('form', 'weather-search-form');
@@ -86,25 +138,40 @@ class AppView {
         this.content.append(weatherCurrentSection);
     }
 
-    createCurrentWeather(msg, weather) {
+    createWeatherForecastSection() {
+        const weatherForecastSection = this.createElement('div', 'weather-forecast-section');
+        const weatherForecastContainer = this.createElement('div', 'weather-forecast-container');
+
+        weatherForecastSection.append(weatherForecastContainer);
+
+        this.weatherForecast = weatherForecastContainer;
+        this.content.append(weatherForecastSection);
+    }
+
+    displayCurrentWeather(msg, currentWeather) {
         this.destroyCurrentWeather();
 
         const weatherCurrentCondition = this.createElement('div', 'weather-current-condition-text');
+        weatherCurrentCondition.innerText = currentWeather.condition;
+
         const weatherCurrentLocation = this.createElement('div', 'weather-current-location');
+        weatherCurrentLocation.innerText = currentWeather.location;
+
         const weatherCurrentDescription = this.createElement('div', 'weather-current-description');
         const weatherCurrentTemp = this.createElement('div', 'weather-current-temp');
         const weatherCurrentDetails = this.createElement('div', 'weather-current-details');
         const weatherCurrentFeelsLike = this.createElement('div', 'weather-current-feels-like');
-        weatherCurrentFeelsLike.innerText = `Feels Like: ${weather.currentWeather.feelsLikeTemp}`;
+        weatherCurrentFeelsLike.innerText = `Feels Like: ${currentWeather.feelsLikeTemp}`;
 
         const weatherCurrentWind = this.createElement('div', 'weather-current-wind');
-        weatherCurrentWind.innerText = `Wind: ${weather.currentWeather.windSpeed}`;
+        weatherCurrentWind.innerText = `Wind: ${currentWeather.windSpeed}`;
 
         const weatherCurrentHumidity = this.createElement('div', 'weather-current-humidity');
-        weatherCurrentHumidity.innerText = `Humidity: ${weather.currentWeather.humidity}`;
+        weatherCurrentHumidity.innerText = `Humidity: ${currentWeather.humidity}`;
 
         const weatherCurrentConditionIconContainer = this.createElement('div', 'weather-current-condition-icon');
-        const weatherCurrentConditionIcon = this.createElement('i', `fas ${weather.currentWeather.conditionIconClass}`);
+        const conditionIconClass = this.getWeatherIconClass(currentWeather.id);
+        const weatherCurrentConditionIcon = this.createElement('i', `fas ${conditionIconClass}`);
 
         weatherCurrentConditionIconContainer.append(weatherCurrentConditionIcon);
 
@@ -115,20 +182,12 @@ class AppView {
         weatherCurrentDescription.append(weatherCurrentTemp);
         weatherCurrentDescription.append(weatherCurrentDetails);
 
+        this.body.backgroundColor = this.getWeatherBackgroundColor(currentWeather.id);
+
         this.currentWeather.append(weatherCurrentCondition);
         this.currentWeather.append(weatherCurrentLocation);
         this.currentWeather.append(weatherCurrentDescription);
         this.currentWeather.append(weatherCurrentConditionIconContainer);
-    }
-
-    createWeatherForecastSection() {
-        const weatherForecastSection = this.createElement('div', 'weather-forecast-section');
-        const weatherForecastContainer = this.createElement('div', 'weather-forecast-container');
-
-        weatherForecastSection.append(weatherForecastContainer);
-
-        this.weatherForecast = weatherForecastContainer;
-        this.content.append(weatherForecastSection);
     }
 
     createWeatherForecastDay(weekday, temp, conditionIconClass) {
@@ -151,7 +210,7 @@ class AppView {
         return dayForecast;
     }
 
-    createWeatherForecast(msg, forecast) {
+    displayWeatherForecast(msg, forecast) {
         this.destroyWeatherForecast();
 
         forecast.forEach(day => {
