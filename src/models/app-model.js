@@ -42,7 +42,22 @@ class AppModel {
 
     async getWeatherForecast(lat, lon) {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=current,minutely,hourly,alerts&appid=${this.apiKey}`, { mode: 'cors' });
-        return response.json();
+        
+        if (response.ok) {
+            return response.json();
+        }
+        
+        if (response.status === 404) {
+            throw new Error('City not found');
+        }
+
+        if (response.status === 429) {
+            throw new Error('Surpassed API call limit')
+        }
+
+        if (response.status >= 500 && response.status < 600) {
+            throw new Error('Bad response from server');
+        }
     }
 
     prepareCurrentWeatherPayload(response) {
