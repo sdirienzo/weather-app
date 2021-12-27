@@ -221,6 +221,7 @@ class AppView {
     applyEventListeners() {
         this.searchInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
+                event.preventDefault();
                 const searchData = {};
                 searchData.city = this.searchInput.value;
                 this.pubSub.publish('get-weather', searchData);
